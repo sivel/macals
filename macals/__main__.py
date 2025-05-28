@@ -1,0 +1,4 @@
+from _macals import main
+
+if __name__ == '__main__':
+    main()

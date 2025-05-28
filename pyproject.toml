@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "macals"
+version = "0.1.0"
+description = "Access ambient light sensor on macOS"
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[[project.authors]]
+name = "Matt Martz"
+email = "matt@sivel.net"
+
+[tool.setuptools]
+packages = ["macals"]
+
+[[tool.setuptools.ext-modules]]
+name = "_macals"
+sources = ["_macals.c"]
