@@ -43,9 +43,8 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
-        runner: [macos-14, macos-15]
         python-version: ${{ fromJson(github.event.inputs.python-versions || vars.PYTHON_VERSIONS) }}
-    runs-on: ${{ matrix.runner }}
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,6 +61,8 @@ jobs:
 
       - name: Build wheel
         run: python -m build --wheel --outdir wheelhouse
+        env:
+          ARCHFLAGS: "-arch arm64"
 
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v4
