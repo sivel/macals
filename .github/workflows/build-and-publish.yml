@@ -14,7 +14,7 @@ jobs:
   sdist:
     name: Build sdist
     if: github.event_name == 'push'
-    runs-on: macos-15-arm64
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
-        runner: [macos-14-arm64, macos-15-arm64]
+        runner: [macos-14, macos-15]
         python-version: ${{ fromJson(github.event.inputs.python-versions || vars.PYTHON_VERSIONS) }}
     runs-on: ${{ matrix.runner }}
     steps:
@@ -73,7 +73,7 @@ jobs:
     name: Publish to PyPI
     if: always()
     needs: [wheels]
-    runs-on: macos-15-arm64
+    runs-on: macos-15
     permissions:
       id-token: write
     environment:
