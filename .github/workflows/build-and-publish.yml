@@ -9,11 +9,19 @@ on:
       python-versions:
         description: 'JSON array of Python versions (e.g., ["3.11", "3.12"])'
         required: false
+      build-sdist:
+        description: 'Build sdist?'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   sdist:
     name: Build sdist
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event.inputs.build-sdist == 'true'
     runs-on: macos-15
     steps:
       - name: Checkout
@@ -68,7 +76,7 @@ jobs:
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-py${{ matrix.python-version }}
           path: wheelhouse/*.whl
 
   publish:
@@ -83,7 +91,7 @@ jobs:
       url: https://pypi.org/p/macals
     steps:
       - name: Download sdist artifact (if available)
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event.inputs.build-sdist == 'true'
         uses: actions/download-artifact@v4
         with:
           name: sdist
@@ -91,7 +99,8 @@ jobs:
       - name: Download wheel artifacts
         uses: actions/download-artifact@v4
         with:
-          name: wheels
+          name: wheels-*
+          merge-multiple: true
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1
